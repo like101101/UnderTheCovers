@@ -5,10 +5,10 @@
 
 #######################################################################################
 # Book settings
-title                       : MyBook Lecture Notes  # The title of the book. Will be placed in the left navbar.
+title                       : UndertheCovers  # The title of the book. Will be placed in the left navbar.
 author                      : Jonathan Appavoo  # The author of the book
-copyright                   : "XXXX"  # Copyright year to be placed in the footer
-logo                        : logo.png  # A path to the book logo
+copyright                   : "2021"  # Copyright year to be placed in the footer
+logo                        : logo.jpg  # A path to the book logo
 only_build_toc_files        : true
 
 repository:
@@ -29,7 +29,7 @@ launch_buttons:
   notebook_interface: "classic"
   binderhub_url: "" # trying to remove binder
   # launch on the public RedHat Operate First Service
-  jupyterhub_url: "https://jupyterhub-opf-jupyterhub.apps.smaug.na.operate-first.cloud"
+  #jupyterhub_url: "https://jupyterhub-opf-jupyterhub.apps.smaug.na.operate-first.cloud"
   # launch on the private BU service -- use this for BU courses -- students must be authorized  
   #jupyterhub_url: "https://jupyterhub-redhat-ods-applications.apps.bu-rosa.8pmt.p1.openshiftapps.com"
 

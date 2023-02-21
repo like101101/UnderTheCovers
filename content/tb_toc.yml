@@ -1,17 +1,46 @@
 format: jb-book
 root: intro_tb
 parts:
-- caption: 'Part 1'
+- caption: 'How to read this book'
+  numbered: false
+  chapters:
+  - file: howto
+- caption: 'The Unix Development Environment'
   numbered: true
   chapters:
-  - file: part1/ch1
-- caption: 'Part 2'
+  - file: unix/intro
+  - file: unix/terminal
+  - file: unix/files
+  - file: unix/shellintro
+  - file: unix/shelldetails
+  - file: unix/editors
+  - file: unix/shellscripts
+  - file: unix/processes
+  - file: unix/ides
+  - file: unix/make
+  - file: unix/gitintro
+  - file: unix/git
+- caption: 'The Belly of the Beast: The von Neumann Architecture and Assembly Programming'
   numbered: true
   chapters:
-  - file: part2/ch1
-  - file: part2/ch2
-- caption: 'Part 3'
+  - file: assembly/intro
+  - file: assembly/vonNeumannArchitecture
+  - file: assembly/UnixAssemblyProgramming
+  - file: assembly/Debuggers
+  - file: assembly/assembly
+  - file: assembly/InfoRepI
+  - file: assembly/nativetypes
+  - file: assembly/anatomyI 
+  - file: assembly/anatomyII 
+  - file: assembly/anatomyIII 
+  - file: assembly/anatomyIV 
+  - file: assembly/assemblyOS 
+- caption: 'Into the Light : C Programming'
   numbered: true
   chapters:
-  - file: part3/ch1
-  - file: part3/ch2
+  - file: C/intro
+  - file: C/mychapter
+- caption: 'Course Specific Material'
+  numbered: false
+  chapters:
+  - file: BUCS210_intro

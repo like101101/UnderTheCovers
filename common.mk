@@ -1,5 +1,4 @@
-OUTDIR=${PWD}/${NAME}
-CNTDIR=content
+BK_DIR=${PWD}/${NAME}
 
 .PHONEY: all jb build fixlinks images pub clean
 
@@ -11,22 +10,21 @@ jb:
 	# -W make warning treated as errors
 	# -n nitpick generate warnings for all missing links
 	# --keep-going despite -W don't stop delay errors till the end
-	jupyter-book build -v --all -n --keep-going --path-output ${OUTDIR} --config ${PWD}/${CNTDIR}/${SN}_config.yml --toc ${PWD}/${CNTDIR}/${SN}_toc.yml ${CNTDIR}
+	jupyter-book build -v --all -n --keep-going --path-output ${BK_DIR} --config ${PWD}/underthecovers/${SN}_config.yml --toc ${PWD}/underthecovers/${SN}_toc.yml underthecovers
 
 images: jb
-	-mkdir -p ${OUTDIR}/_build/html/images
-	cp -r ${CNTDIR}/images/* ${OUTDIR}/_build/html/images
+	-mkdir -p ${BK_DIR}/_build/html/images
+	cp -r underthecovers/images/* ${BK_DIR}/_build/html/images
 
 fixlinks: images
-	./fixlinks.sh ${OUTDIR}/_build/html
+	./fixlinks.sh ${BK_DIR}/_build/html
 
 build: fixlinks
 
 pub:
-	ghp-import -n -p --prefix=${NAME} -f ${OUTDIR}/_build/html
-	@./ghp-nojekyll.sh
+	ghp-import -n -p --prefix=${NAME} -f ${BK_DIR}/_build/html
 	@echo "Published to:"
 	@./ghp-url.sh ${NAME}
 
 clean: 
-	${RM} -r  ${OUTDIR}
+	${RM} -r  ${BK_DIR}

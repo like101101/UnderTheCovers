@@ -1,0 +1,3 @@
+gdb -x setup.gdb add
+break _start
+run
