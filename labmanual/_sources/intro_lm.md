@@ -1,6 +1,8 @@
 Under the Covers : The Secret Life of Software
 ==============================================
 
+Hi There
+
 This the lab manual for the associated textbook of the same name.  
 
 The primary goals of this lab manual is:
