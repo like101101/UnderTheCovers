@@ -2,6 +2,16 @@
 Under the Covers : The Secret Life of Software
 =====================================
 
+```{code-block} python
+:caption: Creating a TensorMesh using SimPEG
+:linenos:
+
+print("hello, world")
+print("hello, world")
+print("hello, world")
+print("hello, world")
+```
+
 In this book we will look under the covers to learn exactly what software is and how it works. Our goal is to allow a reader to learn concepts and practical skills that will help them understand and participate in the digital world.   We will dissect how software and computers work so that the reader can understand the underlying ideas and mechanisms of computing technologies, revealing both beauty and ugliness. 
 
 We will learn how hardware and software are broken down and organized. Learning the generic models that apply to most modern computers.   We will see how physical devices are turned into a blank canvas on which humans paint information as collections of binary bits.  Learning how different types of data are represented and how programs themselves are represented.  We will build our way to understanding how layers of software are fitted together to allow more complex information and ideas, not natively supported by the hardware, to be represented and worked with. 
