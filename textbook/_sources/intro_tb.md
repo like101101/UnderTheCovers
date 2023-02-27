@@ -2,15 +2,7 @@
 Under the Covers : The Secret Life of Software
 =====================================
 
-```{code-block} python
-:caption: Creating a TensorMesh using SimPEG
-:linenos:
-
-print("hello, world")
-print("hello, world")
-print("hello, world")
-print("hello, world")
-```
+Hello
 
 In this book we will look under the covers to learn exactly what software is and how it works. Our goal is to allow a reader to learn concepts and practical skills that will help them understand and participate in the digital world.   We will dissect how software and computers work so that the reader can understand the underlying ideas and mechanisms of computing technologies, revealing both beauty and ugliness. 
 
@@ -40,6 +32,16 @@ This ["book"](https://jappavoo.github.io/UndertheCovers/textbook/intro_tb.html) 
 Jupyter-book is a tool for converting  and exploiting [Jupyter Notebooks](https://jupyter-notebook-beginner-guide.readthedocs.io/en/latest/what_is_jupyter.html) as the main document type for authoring content.  Jupyter Notebooks are an ipython document type who's file names end in `.ipynb`. Jupyter Notebooks allow an author to design and include both static text and interactive content in a document that can be viewed and worked using a [Jupyter user interface app](https://jupyter.org) such as Juypter Lab or the older Jupyter Notebook Classic Interface.
 
 Jupyter-books converts each of the Jupyter Notebooks that make up either the textbook, lecture notes, or lab manual into a website composed of web-pages (html) that can be viewed like any other website.    The websites are static version of the content that the jupyter-book tool created from the underlying source notebooks.    The notebooks however are interactive documents and may include code and content that is best used directly in the form of the notebook.    This is particularly true for the lecture notes and lab manual content.  The lecture notes are designed to used within the classic juypter user interface with the  RISE Presentation extension (https://rise.readthedocs.io/en/stable/).  
+
+```{code-block} python
+:caption: Creating a TensorMesh using SimPEG
+:linenos:
+
+print("hello, world")
+print("hello, world")
+print("hello, world")
+print("hello, world")
+```
 
 To get access to the source notebooks so that you can use them interactively or for you to help author new content you need to get a copy of the [repository](https://github.com/jappavoo/UndertheCovers).    This can be done by manually setting up your own environment and cloning the repository or by using short cuts built into the static websites.  For the interactive pages you will see a rocket icon which if you hover over will reveal a JupyterHub button.  Clicking on this button will redirect you to a JupyterHub service that will start a private Jupyter server for you that will contain a clone of the source material.  See the attached video for more information.   If at any point we want to quickly see the source material you can use the git icon at the top of the web pages -- hovering over it will reveal a repository button that will take you the the git repository. 
 
