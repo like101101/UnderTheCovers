@@ -1,9 +1,11 @@
+
+
 # packages in environment at /opt/conda:
 #
 # Name                    Version                   Build  Channel
 _libgcc_mutex             0.1                 conda_forge    conda-forge
 _openmp_mutex             4.5                       2_gnu    conda-forge
-accessible-pygments       0.0.3              pyhd8ed1ab_0    conda-forge
+accessible-pygments       0.0.4              pyhd8ed1ab_0    conda-forge
 aiofiles                  22.1.0             pyhd8ed1ab_0    conda-forge
 aiosqlite                 0.18.0             pyhd8ed1ab_0    conda-forge
 alabaster                 0.7.13             pyhd8ed1ab_0    conda-forge

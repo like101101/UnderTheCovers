@@ -16,7 +16,7 @@ LABEL maintainer="Open Education <opeffort@gmail.com>"
 ARG ADDITIONAL_DISTRO_PACKAGES
 ARG PYTHON_PREREQ_VERSIONS
 ARG PYTHON_INSTALL_PACKAGES
-# ARG GDB_BUILD_SRC
+ARG GDB_BUILD_SRC
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
@@ -32,6 +32,9 @@ RUN dpkg --add-architecture i386 && \
     apt-get -y update --fix-missing && \
     apt-get -y install ${ADDITIONAL_DISTRO_PACKAGES} && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
+
+COPY aarch64vm /home/aarch64vm
+RUN fix-permissions /home/aarch64vm
     
 # Now that distro packages are installed lets install the python packages we want
 # This was inspired by
@@ -51,41 +54,23 @@ RUN mamba install --quiet --yes ${PYTHON_PREREQ_VERSIONS}  && \
     fix-permissions "/home/${NB_USER}" && \
     mamba clean -afy
     
+USER root
 
+RUN dpkg --add-architecture i386 && \
+    apt-get -y update --fix-missing && \
+    apt-get -y install libdebuginfod-dev libgmp-dev libexpat1-dev lib32gcc-9-dev libedit-dev:i386
 
 # # get and build gdb form source so that we have a current version >10 that support more advanced tui functionality
-# RUN if [[ -n "${GDB_BUILD_SRC}" ]] ; then \
-#       cd /tmp && \
-#       wget http://ftp.gnu.org/gnu/gdb/${GDB_BUILD_SRC}.tar.gz && \
-#       tar -zxf ${GDB_BUILD_SRC}.tar.gz && \
-#       cd ${GDB_BUILD_SRC} && \
-#       ./configure --prefix /usr/local --enable-tui=yes && \
-#       make -j 4 && make install && \
-#       cd /tmp && \
-#       rm -rf ${GDB_BUILD_SRC} && rm ${GDB_BUILD_SRC}.tar.gz ; \
-#     fi
-
-# adding our custom OPE version of RISE for lab -- remove once main RISE is fixed
-# RUN  wget -O - https://dl.yarnpkg.com/debian/pubkey.gpg 2> /dev/null | sudo apt-key add - && \
-#      echo "deb https://dl.yarnpkg.com/debian/ stable main" | sudo tee /etc/apt/sources.list.d/yarn.list && \
-#      sudo apt-get update -y && \
-#      sudo apt-get -y install yarn && \
-#      mkdir /home/RISE && \
-#      chown jovyan /home/RISE && \
-#      fix-permissions /home/RISE && \
-#      apt-get clean && rm -rf /var/lib/apt/lists/*
-
-# USER $NB_USER
-
-# swtiched back to Yiqin's branch to pickup fixes for toggling controls and notes
-# RUN git clone https://github.com/DanNiESh/RISE.git /home/RISE  && \
-#  cd /home/RISE && \
-#  git checkout dev && \
-#  yarn install && \
-#  yarn run build && \
-#  pip install -e . && \
-#  rm -rf .git
-
+RUN if [[ -n "${GDB_BUILD_SRC}" ]] ; then \
+      cd /tmp && \
+      wget http://ftp.gnu.org/gnu/gdb/${GDB_BUILD_SRC}.tar.gz && \
+      tar -zxf ${GDB_BUILD_SRC}.tar.gz && \
+      cd ${GDB_BUILD_SRC} && \
+      ./configure --prefix /usr/local --enable-tui=yes && \
+      make -j 4 && make install && \
+      cd /tmp && \
+      rm -rf ${GDB_BUILD_SRC} && rm ${GDB_BUILD_SRC}.tar.gz ; \
+    fi
 
 
 ## Dockerfile for constructing the base Open Education Effort (OPE)
@@ -102,9 +87,9 @@ RUN mamba install --quiet --yes ${PYTHON_PREREQ_VERSIONS}  && \
 
 # LABEL maintainer="Open Education <opeffort@gmail.com>"
 
-# ARG JUPYTER_ENABLE_EXTENSIONS
-# ARG JUPYTER_DISABLE_EXTENSIONS
-# ARG UNMIN
+ARG JUPYTER_ENABLE_EXTENSIONS
+ARG JUPYTER_DISABLE_EXTENSIONS
+ARG UNMIN
 # ARG ADDITIONAL_DISTRO_PACKAGES
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
@@ -113,15 +98,15 @@ RUN mamba install --quiet --yes ${PYTHON_PREREQ_VERSIONS}  && \
 
 USER ${NB_UID}
 
-# RUN for ext in ${JUPYTER_ENABLE_EXTENSIONS} ; do \
-#    jupyter nbextension enable "$ext" ; \
-#    done
+RUN for ext in ${JUPYTER_ENABLE_EXTENSIONS} ; do \
+   jupyter nbextension enable "$ext" ; \
+   done
 
 # disable extensions -- disabling core extensions can be really useful for customizing
-#                       jupyterlab user experience
-# RUN for ext in ${JUPYTER_DISABLE_EXTENSIONS} ; do \
-#    jupyter labextension disable "$ext" ; \
-#    done
+# jupyterlab user experience
+RUN for ext in ${JUPYTER_DISABLE_EXTENSIONS} ; do \
+   jupyter labextension disable "$ext" ; \
+   done
 
 # Import matplotlib the first time to build the font cache.
 ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
@@ -135,7 +120,7 @@ COPY settings ${CONDA_DIR}/share/jupyter/lab/settings
 USER root
 
 # we want the container to feel more like a fully fledged system so we are pulling the trigger and unminimizing it
-# RUN [[ $UNMIN == "yes" ]] &&  yes | unminimize || true
+RUN [[ $UNMIN == "yes" ]] &&  yes | unminimize || true
 
 # Add ARM development environtment
 # COPY aarch64vm /home/aarch64vm
