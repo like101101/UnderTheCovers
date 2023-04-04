@@ -30,11 +30,11 @@ USER root
 
 RUN dpkg --add-architecture i386 && \
     apt-get -y update --fix-missing && \
-    apt-get -y install ${ADDITIONAL_DISTRO_PACKAGES} && \
+    apt-get -y install build-essential libncurses-dev libgmp-dev libexpat1-dev lib32gcc-9-dev libedit-dev:i386 libmagic1 && \
+    apt-get autoremove && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
-COPY aarch64vm /home/aarch64vm
-RUN fix-permissions /home/aarch64vm
+# COPY aarch64vm /home/aarch64vm
     
 # Now that distro packages are installed lets install the python packages we want
 # This was inspired by
@@ -56,9 +56,9 @@ RUN mamba install --quiet --yes ${PYTHON_PREREQ_VERSIONS}  && \
     
 USER root
 
-RUN dpkg --add-architecture i386 && \
-    apt-get -y update --fix-missing && \
-    apt-get -y install libdebuginfod-dev libgmp-dev libexpat1-dev lib32gcc-9-dev libedit-dev:i386
+# RUN dpkg --add-architecture i386 && \
+#     apt-get -y update --fix-missing && \
+#     apt-get -y install libdebuginfod-dev libgmp-dev libexpat1-dev lib32gcc-9-dev libedit-dev:i386
 
 # # get and build gdb form source so that we have a current version >10 that support more advanced tui functionality
 RUN if [[ -n "${GDB_BUILD_SRC}" ]] ; then \
@@ -77,24 +77,35 @@ RUN if [[ -n "${GDB_BUILD_SRC}" ]] ; then \
 ## container.  This container contains everything required for authoring OPE courses
 ## Well is should anyway ;-)
 
-# ARG FROM_REG
-# ARG FROM_IMAGE
-# ARG FROM_TAG
+ARG FROM_REG
+ARG FROM_IMAGE
+ARG FROM_TAG
 
-# FROM ${FROM_REG}${FROM_IMAGE}${FROM_TAG} AS stage-two
+FROM ${FROM_REG}${FROM_IMAGE}${FROM_TAG} AS stage-two
 
-# COPY --from=stage-one /opt/conda /opt/conda
+COPY --from=stage-one /opt/conda /opt/conda
+COPY --from=stage-one /usr/local/bin/gdb /usr/local/bin/gdb
+COPY --from=stage-one --chown=jovyan:root /home /home
+# COPY --from=stage-one /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu 
 
 # LABEL maintainer="Open Education <opeffort@gmail.com>"
 
 ARG JUPYTER_ENABLE_EXTENSIONS
 ARG JUPYTER_DISABLE_EXTENSIONS
 ARG UNMIN
-# ARG ADDITIONAL_DISTRO_PACKAGES
+ARG ADDITIONAL_DISTRO_PACKAGES
 
 # Fix: https://github.com/hadolint/hadolint/wiki/DL4006
 # Fix: https://github.com/koalaman/shellcheck/wiki/SC3014
 # SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+USER root
+
+RUN dpkg --add-architecture i386 && \
+    apt-get -y update --fix-missing && \
+    apt-get -y install ${ADDITIONAL_DISTRO_PACKAGES} && \
+    apt-get autoremove && \
+    apt-get clean && rm -rf /var/lib/apt/lists/*
 
 USER ${NB_UID}
 
@@ -117,13 +128,13 @@ ENV XDG_CACHE_HOME="/home/${NB_USER}/.cache/"
 # copy overrides.json
 COPY settings ${CONDA_DIR}/share/jupyter/lab/settings
 
+# Add ARM development environtment
+# COPY --chown=jovyan:root aarch64vm /home/aarch64vm
+
 USER root
 
 # we want the container to feel more like a fully fledged system so we are pulling the trigger and unminimizing it
 RUN [[ $UNMIN == "yes" ]] &&  yes | unminimize || true
-
-# Add ARM development environtment
-# COPY aarch64vm /home/aarch64vm
 
 # final bits of cleanup
 RUN touch /home/${NB_USER}/.hushlogin && \
@@ -154,7 +165,7 @@ ARG OPE_GROUP
 ARG CHOWN_HOME=yes
 ARG CHOWN_HOME_OPTS="-R"
 ARG CHOWN_EXTRA_OPTS='-R'
-ARG CHOWN_EXTRA="${CONDA_DIR}"
+ARG CHOWN_EXTRA="/home/aarch64vm"
 ENV OPE_UID=${OPE_UID}
 ENV NB_UID=${OPE_UID}
 ENV OPE_GID=${OPE_GID}
@@ -173,7 +184,12 @@ ENV NB_GROUP=${NB_GROUP}
 # an opportunity to set things up based on dynamic facts such as user name
 COPY start-notebook.d /usr/local/bin/start-notebook.d
 
+COPY ope /usr/local/bin/ope
+
 ENV USER=$NB_USER
-RUN chgrp root -R /home
+
+# RUN chgrp root -R /home
+    # chown $USER ${CHOWN_HOME_OPTS} ${CHOWN_EXTRA}
+
 USER $NB_USER
 CMD  ["/bin/bash", "-c", "cd /home/jovyan ; start-notebook.sh"]
