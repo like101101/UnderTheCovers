@@ -83,9 +83,12 @@ ARG FROM_TAG
 
 FROM ${FROM_REG}${FROM_IMAGE}${FROM_TAG} AS stage-two
 
-COPY --from=stage-one /opt/conda /opt/conda
+ARG OPE_UID
+ARG OPE_GID
+
+COPY --from=stage-one /opt /opt
 COPY --from=stage-one /usr/local/bin/gdb /usr/local/bin/gdb
-COPY --from=stage-one --chown=jovyan:root /home /home
+COPY --from=stage-one --chown=jovyan:${OPE_GID} /home /home
 # COPY --from=stage-one /lib/x86_64-linux-gnu /lib/x86_64-linux-gnu 
 
 # LABEL maintainer="Open Education <opeffort@gmail.com>"
@@ -136,6 +139,12 @@ USER root
 # we want the container to feel more like a fully fledged system so we are pulling the trigger and unminimizing it
 RUN [[ $UNMIN == "yes" ]] &&  yes | unminimize || true
 
+RUN  fix-permissions "${CONDA_DIR}" && \
+     fix-permissions "/home/${NB_USER}"&& \
+     fix-permissions ${CONDA_DIR}/share/jupyter/lab/settings
+
+RUN nbstripout --install --system 
+
 # final bits of cleanup
 RUN touch /home/${NB_USER}/.hushlogin && \
 # use a short prompt to improve default behaviour in presentations
@@ -143,17 +152,7 @@ RUN touch /home/${NB_USER}/.hushlogin && \
 # work around bug when term is xterm and emacs runs in xterm.js -- causes escape characters in file
     echo "export TERM=linux" >> /home/${NB_USER}/.bashrc && \
 # finally remove default working directory from joyvan home
-    rmdir /home/${NB_USER}/work && \
-    # as per the nbstripout readme we setup nbstripout be always be used for the joyvan user for all repos
-    nbstripout --install --system && \
-    # # use built in startup script to setup new user home
-    /usr/local/bin/start.sh true; \
-    echo "hardcoding $NB_USER to uid=$NB_UID and group name $NB_GROUP with gid=$NB_GID shell to /bin/bash" ; \
-    usermod -s /bin/bash $NB_USER ; \
-    [[ -w /etc/passwd ]] && echo "Removing write access to /etc/passwd" && chmod go-w /etc/passwd
-
-
-
+    rmdir /home/${NB_USER}/work 
 
 # Static Customize for OPE USER ID choices
 # To avoid problems with start.sh logic we do not modify user name
@@ -165,7 +164,6 @@ ARG OPE_GROUP
 ARG CHOWN_HOME=yes
 ARG CHOWN_HOME_OPTS="-R"
 ARG CHOWN_EXTRA_OPTS='-R'
-ARG CHOWN_EXTRA="/home/aarch64vm"
 ENV OPE_UID=${OPE_UID}
 ENV NB_UID=${OPE_UID}
 ENV OPE_GID=${OPE_GID}
@@ -177,6 +175,12 @@ ENV NB_GROUP=${NB_GROUP}
 
 # Done customization
 
+# # use built in startup script to setup new user home
+RUN /usr/local/bin/start.sh true; \
+    echo "hardcoding $NB_USER to uid=$NB_UID and group name $NB_GROUP with gid=$NB_GID shell to /bin/bash" ; \
+    usermod -s /bin/bash $NB_USER ; \
+    [[ -w /etc/passwd ]] && echo "Removing write access to /etc/passwd" && chmod go-w /etc/passwd
+
 # jupyter-stack contains logic to run custom start hook scripts from
 # two locations -- /usr/local/bin/start-notebook.d and
 #                 /usr/local/bin/before-notebook.d
@@ -184,12 +188,9 @@ ENV NB_GROUP=${NB_GROUP}
 # an opportunity to set things up based on dynamic facts such as user name
 COPY start-notebook.d /usr/local/bin/start-notebook.d
 
-COPY ope /usr/local/bin/ope
+# COPY ope /usr/local/bin/ope
 
 ENV USER=$NB_USER
-
-# RUN chgrp root -R /home
-    # chown $USER ${CHOWN_HOME_OPTS} ${CHOWN_EXTRA}
 
 USER $NB_USER
 CMD  ["/bin/bash", "-c", "cd /home/jovyan ; start-notebook.sh"]
