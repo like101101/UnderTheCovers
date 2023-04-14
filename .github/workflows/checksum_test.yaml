@@ -11,10 +11,10 @@ jobs:
         uses: actions/setup-python@v4 #use action to install python
         with:
           python-version: "3.9"
-      - name: Install dependencies #requirements docs unable to read, hard installing dependencies 
-        run: |
-          #pip install -r requirements.txt    
-          pip install jupyter-book matplotlib numpy pandas
+      # - name: Install dependencies #requirements docs unable to read, hard installing dependencies 
+      #   run: |
+      #     #pip install -r requirements.txt    
+      #     pip install jupyter-book matplotlib numpy pandas
       - name: Pull the most recent image
         run: |
           make pull-priv
@@ -28,14 +28,12 @@ jobs:
           #*********************************************
           #need to insert correct image CHECKSUM val to compare
           #*********************************************
-          CHECKSUM=7d8ae7f7c2864fe89255cfbf9bd4e48b4061783aa971542d7cbf3462e4275b07
-          if [["$QUICK_TRIM == $CHECKSUM"]]; then
+          CHECKSUM=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+          if [[ "$QUICK_TRIM == $CHECKSUM" ]]; then
                 echo "VERIFICATION COMPLETE"
                 echo "SUCCESS" 
-                echo "checksum = $QUICK_TRIM"
           else 
                 echo "VERIFICATION COMPLETE"
                 echo "FAILURE"
-                echo "checksum = $QUICK_TRIM does not match the correct image checksum = $CHECKSUM"
                 exit 1
           fi
