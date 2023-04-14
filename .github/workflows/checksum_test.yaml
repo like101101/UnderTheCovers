@@ -21,7 +21,7 @@ jobs:
       - name: Run the checksum #creates var with checksum value to be compared 
         run: |
           echo "VERIFYING IMAGE CHECKSUM"
-          PERMISSIONS_CHECKSUM=$( sudo make checksum )
+          PERMISSIONS_CHECKSUM=$( make checksum )
           QUICK_TRIM=${PERMISSIONS_CHECKSUM::64} #quick_trim is used to get rid of the tailing "-" after the checksum
           echo "displaying modified checksum: $QUICK_TRIM "
           echo "COMPARING PULLED IMAGE CHECKSUM WITH CORRECT IMAGE CHECKSUM"
@@ -38,4 +38,4 @@ jobs:
           fi
       - name: Checksum for test
         run: |
-          sudo make shatest
+          make shatest
