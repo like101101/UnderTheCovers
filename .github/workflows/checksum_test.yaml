@@ -15,14 +15,13 @@ jobs:
         run: |
           #pip install -r requirements.txt    
           pip install jupyter-book matplotlib numpy pandas
-      - name: make build # makes the container image build and then creates var with checksum value to be compared 
+      - name: Pull the most recent image
         run: |
-          make build
-      - name: run checksum #creates var with checksum value to be compared 
+          make pull-priv
+      - name: Run the checksum #creates var with checksum value to be compared 
         run: |
           echo "VERIFYING IMAGE CHECKSUM"
           PERMISSIONS_CHECKSUM=$( make checksum )
-          echo "displaying the pulled image checksum: $PERMISSIONS_CHECKSUM "
           QUICK_TRIM=${PERMISSIONS_CHECKSUM::64} #quick_trim is used to get rid of the tailing "-" after the checksum
           echo "displaying modified checksum: $QUICK_TRIM "
           echo "COMPARING PULLED IMAGE CHECKSUM WITH CORRECT IMAGE CHECKSUM"

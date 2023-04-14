@@ -125,10 +125,6 @@ base/private_image_info.$(VERSION): DARGS ?=
 base/private_image_info.$(VERSION):
 	docker inspect $(DARGS) $(PRIVATE_REG)$(IMAGE)$(PRIVATE_TAG)  > $@
 
-base/aarch64vm/README.md:
-	cd base && wget -O - ${ARCH64VMTGZ} | tar -zxf -
-
-build: base/aarch64vm/README.md
 build: IMAGE = $(PRIVATE_IMAGE)
 build: DARGS ?= --build-arg FROM_REG=$(BASE_REG) \
                    --build-arg FROM_IMAGE=$(BASE_IMAGE) \
@@ -206,7 +202,7 @@ checksum: TAG = $(PRIVATE_TAG)
 checksum: ARGS ?= find / -not \( -path /proc -prune \) -not \( -path /sys -prune \) -type f 2>/dev/null -exec stat -c '%n %a' {} + | sha256sum
 checksum: DARGS ?= -u 0
 checksum: ## start private version  with root shell to do admin and poke around
-	-docker run -it --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
+	@-docker run -it --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
 
 user: IMAGE = $(PRIVATE_IMAGE)
 user: REG = $(PRIVATE_REG)
