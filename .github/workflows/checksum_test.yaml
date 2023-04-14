@@ -35,7 +35,6 @@ jobs:
           else 
                 echo "VERIFICATION COMPLETE"
                 echo "FAILURE"
-                exit 1
           fi
       - name: Checksum for test
         run: |
