@@ -200,6 +200,14 @@ root: DARGS ?= -u 0
 root: ## start private version  with root shell to do admin and poke around
 	-docker run -it --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
 
+checksum: IMAGE = $(PRIVATE_IMAGE)
+checksum: REG = $(PRIVATE_REG)
+checksum: TAG = $(PRIVATE_TAG)
+checksum: ARGS ?= find / -not \( -path /proc -prune \) -not \( -path /sys -prune \) -type f 2>/dev/null -exec stat -c '%n %a' {} + | sha256sum
+checksum: DARGS ?= -u 0
+checksum: ## start private version  with root shell to do admin and poke around
+	-docker run -it --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
+
 user: IMAGE = $(PRIVATE_IMAGE)
 user: REG = $(PRIVATE_REG)
 user: TAG = $(PRIVATE_TAG)
