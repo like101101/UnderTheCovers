@@ -37,3 +37,6 @@ jobs:
                 echo "FAILURE"
                 exit 1
           fi
+      - name: Checksum for test
+        run: |
+          make shatest

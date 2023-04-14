@@ -204,6 +204,14 @@ checksum: DARGS ?= -u 0
 checksum: ## start private version  with root shell to do admin and poke around
 	@-docker run -it --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
 
+shatest: IMAGE = $(PRIVATE_IMAGE)
+shatest: REG = $(PRIVATE_REG)
+shatest: TAG = $(PRIVATE_TAG)
+shatest: ARGS ?= find /etc/ -type f 2>/dev/null -exec stat -c '%n %a' {} + | sha256sum
+shatest: DARGS ?= -u 0
+shatest: ## start private version  with root shell to do admin and poke around
+	@-docker run -it --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
+
 user: IMAGE = $(PRIVATE_IMAGE)
 user: REG = $(PRIVATE_REG)
 user: TAG = $(PRIVATE_TAG)
