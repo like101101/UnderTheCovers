@@ -199,7 +199,7 @@ root: ## start private version  with root shell to do admin and poke around
 checksum: IMAGE = $(PRIVATE_IMAGE)
 checksum: REG = $(PRIVATE_REG)
 checksum: TAG = $(PRIVATE_TAG)
-checksum: ARGS ?= find / -not \( -path /proc -prune \) -not \( -path /sys -prune \)  -not \( -path /etc -prune \) -type f -exec stat -c '%n %a' {} + | sha256sum
+checksum: ARGS ?= find / -not \( -path /proc -prune \) -not \( -path /sys -prune \) -type f -exec stat -c '%n %a' {} + | sort -k 1 | sha256sum
 checksum: DARGS ?= -u 0
 checksum: ## start private version  with root shell to do admin and poke around
 	@-docker run -i --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
@@ -207,7 +207,7 @@ checksum: ## start private version  with root shell to do admin and poke around
 shatest: IMAGE = $(PRIVATE_IMAGE)
 shatest: REG = $(PRIVATE_REG)
 shatest: TAG = $(PRIVATE_TAG)
-shatest: ARGS ?= find /home/ -not \( -path /home/jovyan/.cache -prune \) -type f -exec stat -c '%n %a' {} + # | sha256sum
+shatest: ARGS ?= find /home/ -type f -exec stat -c '%n %a' {} + | sort -k 1 # | sha256sum
 shatest: DARGS ?= -u 0
 shatest: ## start private version  with root shell to do admin and poke around
 	@-docker run -i --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
