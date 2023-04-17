@@ -207,7 +207,7 @@ checksum: ## start private version  with root shell to do admin and poke around
 shatest: IMAGE = $(PRIVATE_IMAGE)
 shatest: REG = $(PRIVATE_REG)
 shatest: TAG = $(PRIVATE_TAG)
-shatest: ARGS ?= find /var/ -type f -exec stat -c '%n %a' {} + | sha256sum
+shatest: ARGS ?= find /home/ -type f -exec stat -c '%n %a' {} + | sha256sum
 shatest: DARGS ?= -u 0
 shatest: ## start private version  with root shell to do admin and poke around
 	@-docker run -i --rm $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
