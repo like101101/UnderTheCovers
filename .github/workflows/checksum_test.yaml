@@ -23,4 +23,5 @@ jobs:
           make shatest > checksum_runner.txt
           cat checksum_runner.txt
       - name: Diff the filenames
+        run: |
           diff checksum_runner.txt checksum_local.txt
