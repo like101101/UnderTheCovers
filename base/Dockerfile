@@ -189,7 +189,9 @@ RUN /usr/local/bin/start.sh true; \
 COPY start-notebook.d /usr/local/bin/start-notebook.d
 
 # COPY ope /usr/local/bin/ope
-
+ENV LC_ALL C.UTF-8
+ENV LANG C.UTF-8
+ENV LANGUAGE=
 ENV USER=$NB_USER
 
 USER $NB_USER

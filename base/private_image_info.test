@@ -1,16 +1,16 @@
 [
     {
-        "Id": "sha256:decb0ae9956dad0ed3f0814323f39dd7bd0f37886a159e87e0e427d8585cbd91",
+        "Id": "sha256:1b7408604623a05e07ba2e77eddd3f71faa01940324e9c7e302d796bd531ed76",
         "RepoTags": [
             "quay.io/rh_ee_keli/ucsls:test-mof-burosa-devS23"
         ],
         "RepoDigests": [],
-        "Parent": "sha256:839dfeb7ddf2e69f4a0c3427f2f2318a873911cf9b0af7373a8104542e5c2ac5",
+        "Parent": "sha256:e51cefbfffb64dc031975084245259853172465d599a2fd6f56dad0b24c485d3",
         "Comment": "",
-        "Created": "2023-04-14T02:02:20.315642274Z",
-        "Container": "5f20a6150e5acf871e73bfb20184ba4d866c12ce2852509e63da4732ad16b78d",
+        "Created": "2023-04-18T22:16:00.717471386Z",
+        "Container": "7a2b7f70f50e8c5fb2ea0c93ef8c60a636e5cfa53534b6c40fb631a1f83cdcea",
         "ContainerConfig": {
-            "Hostname": "5f20a6150e5a",
+            "Hostname": "7a2b7f70f50e",
             "Domainname": "",
             "User": "jovyan",
             "AttachStdin": false,
@@ -30,9 +30,9 @@
                 "NB_USER=jovyan",
                 "NB_UID=1001030000",
                 "NB_GID=100",
-                "LC_ALL=en_US.UTF-8",
-                "LANG=en_US.UTF-8",
-                "LANGUAGE=en_US.UTF-8",
+                "LC_ALL=C.UTF-8",
+                "LANG=C.UTF-8",
+                "LANGUAGE=",
                 "HOME=/home/jovyan",
                 "JUPYTER_PORT=8888",
                 "XDG_CACHE_HOME=/home/jovyan/.cache/",
@@ -60,7 +60,7 @@
                 "StartPeriod": 5000000000,
                 "Retries": 3
             },
-            "Image": "sha256:839dfeb7ddf2e69f4a0c3427f2f2318a873911cf9b0af7373a8104542e5c2ac5",
+            "Image": "sha256:e51cefbfffb64dc031975084245259853172465d599a2fd6f56dad0b24c485d3",
             "Volumes": null,
             "WorkingDir": "/home/jovyan",
             "Entrypoint": [
@@ -104,9 +104,9 @@
                 "NB_USER=jovyan",
                 "NB_UID=1001030000",
                 "NB_GID=100",
-                "LC_ALL=en_US.UTF-8",
-                "LANG=en_US.UTF-8",
-                "LANGUAGE=en_US.UTF-8",
+                "LC_ALL=C.UTF-8",
+                "LANG=C.UTF-8",
+                "LANGUAGE=",
                 "HOME=/home/jovyan",
                 "JUPYTER_PORT=8888",
                 "XDG_CACHE_HOME=/home/jovyan/.cache/",
@@ -131,7 +131,7 @@
                 "StartPeriod": 5000000000,
                 "Retries": 3
             },
-            "Image": "sha256:839dfeb7ddf2e69f4a0c3427f2f2318a873911cf9b0af7373a8104542e5c2ac5",
+            "Image": "sha256:e51cefbfffb64dc031975084245259853172465d599a2fd6f56dad0b24c485d3",
             "Volumes": null,
             "WorkingDir": "/home/jovyan",
             "Entrypoint": [
@@ -205,7 +205,7 @@
             ]
         },
         "Metadata": {
-            "LastTagTime": "2023-04-14T02:02:25.046699874Z"
+            "LastTagTime": "2023-04-18T22:16:06.501048637Z"
         }
     }
 ]
