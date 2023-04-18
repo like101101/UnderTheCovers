@@ -18,7 +18,9 @@ jobs:
       - name: Pull the most recent image
         run: |
           make pull-priv
-      - name: Run the checksum diff #creates var with checksum value to be compared 
+      - name: Run the checksum  #creates var with checksum value to be compared 
         run: |
           make shatest > checksum_runner.txt
           cat checksum_runner.txt
+      - name: Diff the filenames
+          diff checksum_runner.txt checksum_local.txt
