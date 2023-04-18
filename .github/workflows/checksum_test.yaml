@@ -18,24 +18,7 @@ jobs:
       - name: Pull the most recent image
         run: |
           make pull-priv
-      - name: Run the checksum #creates var with checksum value to be compared 
+      - name: Run the checksum diff #creates var with checksum value to be compared 
         run: |
-          echo "VERIFYING IMAGE CHECKSUM"
-          PERMISSIONS_CHECKSUM=$( make checksum )
-          QUICK_TRIM=${PERMISSIONS_CHECKSUM::64} #quick_trim is used to get rid of the tailing "-" after the checksum
-          echo "displaying modified checksum: $QUICK_TRIM "
-          echo "COMPARING PULLED IMAGE CHECKSUM WITH CORRECT IMAGE CHECKSUM"
-          #*********************************************
-          #need to insert correct image CHECKSUM val to compare
-          #*********************************************
-          CHECKSUM=e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
-          if [[ "$QUICK_TRIM == $CHECKSUM" ]]; then
-                echo "VERIFICATION COMPLETE"
-                echo "SUCCESS" 
-          else 
-                echo "VERIFICATION COMPLETE"
-                echo "FAILURE"
-          fi
-      - name: Checksum for test
-        run: |
-          make shatest
+          make checksum > checksum_runner.txt
+          diff checksum_list.txt checksum_runner.txt
