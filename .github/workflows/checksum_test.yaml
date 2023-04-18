@@ -21,4 +21,4 @@ jobs:
       - name: Run the checksum diff #creates var with checksum value to be compared 
         run: |
           make checksum > checksum_runner.txt
-          diff checksum_list.txt checksum_runner.txt
+          diff checksum_local.txt checksum_runner.txt
