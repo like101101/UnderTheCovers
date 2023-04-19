@@ -18,10 +18,12 @@ jobs:
       - name: Pull the most recent image
         run: |
           make pull-priv
-      - name: Run the checksum  #creates var with checksum value to be compared 
+      - name: Get checksum value
         run: |
-          make shatest > checksum_runner.txt
-          cat checksum_runner.txt
-      - name: Diff the filenames
+          make checksum | sha256sum
+      - name: Run inputs diff #creates var with checksum value to be compared 
         run: |
+          make checksum > checksum_runner.txt
           diff checksum_runner.txt checksum_local.txt
+
+          
