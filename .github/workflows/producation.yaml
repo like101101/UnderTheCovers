@@ -1,0 +1,38 @@
+name: image production
+on:
+  push:
+    branches: image-burosa-devS23
+jobs:
+  build:
+    runs-on: ubuntu-latest #use the latest ubuntu container image 
+    steps:
+      - uses: actions/checkout@v3
+      - name: Build the image
+        run: |
+          make build
+  
+  test:
+    runs-on: ubuntu-latest #use the latest ubuntu container image
+    steps:
+      - uses: actions/checkout@v3
+      - name: Comparing checksum value
+        run: |
+          echo "Getting the image checksum"
+          PERMISSIONS_CHECKSUM=$( make checksum )
+          QUICK_TRIM=${PERMISSIONS_CHECKSUM::64}
+          echo "Comparing the correct checksum value"
+          CHECKSUM=$( cat base/checksum.txt )
+          if [[ "$QUICK_TRIM == $CHECKSUM" ]]; then
+                echo "SUCCESS" 
+          else 
+                echo "FAILURE"
+                echo "Here is the image checksum:"
+                echo "  $QUICK_TRIM"
+                echo "Here is the correct checksum:"
+                echo "  $CHECKSUM"
+                exit 1
+          fi
+
+      - name: Run course-specific tests
+        run: |
+          make -C tests test

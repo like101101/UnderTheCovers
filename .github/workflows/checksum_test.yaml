@@ -11,10 +11,7 @@ jobs:
         uses: actions/setup-python@v4 #use action to install python
         with:
           python-version: "3.9"
-      # - name: Install dependencies #requirements docs unable to read, hard installing dependencies 
-      #   run: |
-      #     #pip install -r requirements.txt    
-      #     pip install jupyter-book matplotlib numpy pandas
+
       - name: Pull the most recent image
         run: |
           make pull-priv
