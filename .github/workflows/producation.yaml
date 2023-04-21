@@ -13,6 +13,7 @@ jobs:
   
   test:
     runs-on: ubuntu-latest #use the latest ubuntu container image
+    needs: build
     steps:
       - uses: actions/checkout@v3
       - name: Comparing checksum value
@@ -36,3 +37,16 @@ jobs:
       - name: Run course-specific tests
         run: |
           make -C tests test
+    
+  publish:
+    runs-on: ubuntu-latest #use the latest ubuntu container image
+    needs: test
+    steps:
+      - uses: actions/checkout@v3
+      - name: Push the image
+        env:
+            QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
+            QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
+        run: |
+          docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
+          make push
