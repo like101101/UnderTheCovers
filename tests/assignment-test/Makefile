@@ -17,7 +17,7 @@ ibuild: pull
 	docker run -u 0 -v $(MOUNT) $(BUILT_IMAGE) make build
 
 itest: MOUNT = $(CWD):$(CONTAINER_DIR)
-itest: pull ibuild
+itest: ibuild
 	docker run -u 0 -v $(MOUNT) $(BUILT_IMAGE) ./testassignments.sh
 
 run: MOUNT = $(CWD):$(CONTAINER_DIR)
