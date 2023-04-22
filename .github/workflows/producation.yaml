@@ -6,15 +6,19 @@ jobs:
   build:
     runs-on: ubuntu-latest #use the latest ubuntu container image 
     steps:
-      - name: checkout the code
+      - name: Checkout the code
         uses: actions/checkout@v3
 
-      - name: build the image
+      - name: Build the image
         run: |
           make build
         
-      - name: push beta version
+      - name: Push beta version
+        env:
+            QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
+            QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
         run: |
+          docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
           make push
       
   
@@ -22,20 +26,20 @@ jobs:
     runs-on: ubuntu-latest #use the latest ubuntu container image
     needs: build
     steps:
-      - name: checkout the code
+      - name: Checkout the code
         uses: actions/checkout@v3
 
-      - name: pull beta-version
+      - name: Pull beta-version
         run: |
           make pull-priv
 
-      - name: show debug info
+      - name: Show debug info
         run: |
           IMAGE_TAG=$( make show-tag )
           echo "For debugging purposes, here is the image tag:"
           echo "  $IMAGE_TAG"
 
-      - name: comparing checksum value
+      - name: Comparing checksum value
         run: |
           PERMISSIONS_CHECKSUM=$( make checksum )
           QUICK_TRIM=${PERMISSIONS_CHECKSUM::64}
@@ -59,7 +63,9 @@ jobs:
     runs-on: ubuntu-latest #use the latest ubuntu container image
     needs: test
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout the code
+        uses: actions/checkout@v3
+
       - name: Login in to Quay.io
         env:
             QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
@@ -67,10 +73,10 @@ jobs:
         run: |
           docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
 
-      - name: pull the version
+      - name: Pull the beta version
         run: |
           make pull-priv
 
-      - name: push to stable version
+      - name: Publish to stable version
         run: |
-          make retag
+          make publish-stable
