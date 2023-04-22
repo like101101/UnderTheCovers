@@ -6,22 +6,39 @@ jobs:
   build:
     runs-on: ubuntu-latest #use the latest ubuntu container image 
     steps:
-      - uses: actions/checkout@v3
-      - name: Build the image
+      - name: checkout the code
+        uses: actions/checkout@v3
+
+      - name: build the image
         run: |
           make build
+        
+      - name: push beta version
+        run: |
+          make push
+      
   
   test:
     runs-on: ubuntu-latest #use the latest ubuntu container image
     needs: build
     steps:
-      - uses: actions/checkout@v3
-      - name: Comparing checksum value
+      - name: checkout the code
+        uses: actions/checkout@v3
+
+      - name: pull beta-version
         run: |
-          echo "Getting the image checksum"
+          make pull-priv
+
+      - name: show debug info
+        run: |
+          IMAGE_TAG=$( make show-tag )
+          echo "For debugging purposes, here is the image tag:"
+          echo "  $IMAGE_TAG"
+
+      - name: comparing checksum value
+        run: |
           PERMISSIONS_CHECKSUM=$( make checksum )
           QUICK_TRIM=${PERMISSIONS_CHECKSUM::64}
-          echo "Comparing the correct checksum value"
           CHECKSUM=$( cat base/checksum.txt )
           if [[ "$QUICK_TRIM == $CHECKSUM" ]]; then
                 echo "SUCCESS" 
@@ -43,10 +60,17 @@ jobs:
     needs: test
     steps:
       - uses: actions/checkout@v3
-      - name: Push the image
+      - name: Login in to Quay.io
         env:
             QUAY_USERNAME: ${{ secrets.QUAY_USERNAME }}
             QUAY_PASSWORD: ${{ secrets.QUAY_PASSWORD }}
         run: |
           docker login quay.io -u $QUAY_USERNAME -p $QUAY_PASSWORD
-          make push
+
+      - name: pull the version
+        run: |
+          make pull-priv
+
+      - name: push to stable version
+        run: |
+          make retag

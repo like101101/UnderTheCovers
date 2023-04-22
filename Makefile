@@ -36,7 +36,7 @@ PRIVATE_USER := $(shell if  [[ -a base/private_user ]]; then cat base/private_us
 PRIVATE_REG := $(shell cat base/private_registry)/
 PRIVATE_IMAGE := $(PRIVATE_USER)/$(OPE_BOOK)
 PRIVATE_STABLE_TAG := :stable-$(CUST)
-PRIVATE_TEST_TAG := :test-$(CUST)
+PRIVATE_TEST_TAG := :beta-$(CUST)
 
 PUBLIC_USER := $(shell cat base/ope_book_user)
 PUBLIC_REG := $(shell cat base/ope_book_registry)/
@@ -230,3 +230,21 @@ run-priv: DARGS ?= -u $(OPE_UID):$(OPE_GID) -v "${HOST_DIR}":"${MOUNT_DIR}" -v "
 run-priv: PORT ?= 8888
 run-priv: ## start published version with jupyter lab interface
 	docker run -it --rm -p $(PORT):$(PORT) $(DARGS) $(REG)$(IMAGE)$(TAG) $(ARGS)
+
+
+show-tag: IMAGE = $(PRIVATE_IMAGE)
+show-tag: REG = $(PRIVATE_REG)
+show-tag: TAG = $(PRIVATE_TAG)
+show-tag: ARGS ?=
+show-tag: DARGS ?=
+show-tag: ## tag current private build as beta
+	@-echo $(REG)$(IMAGE)$(TAG)
+
+
+publish-stable: IMAGE = $(PRIVATE_IMAGE)
+publish-stable: REG = $(PRIVATE_REG)
+publish-stable: OLD_TAG = $(PRIVATE_TAG)
+publish-stable: NEW_TAG = $(PRIVATE_STABLE_TAG)
+publish-stable: 
+	docker tag $(REG)$(IMAGE)$(OLD_TAG) $(REG)$(IMAGE)$(NEW_TAG)
+  docker push $(REG)$(IMAGE)$(NEW_TAG)
