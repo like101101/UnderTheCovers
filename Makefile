@@ -246,5 +246,5 @@ publish-stable: REG = $(PRIVATE_REG)
 publish-stable: OLD_TAG = $(PRIVATE_TAG)
 publish-stable: NEW_TAG = $(PRIVATE_STABLE_TAG)
 publish-stable: 
-	docker tag $(REG)$(IMAGE)$(OLD_TAG) $(REG)$(IMAGE)$(NEW_TAG)
-  docker push $(REG)$(IMAGE)$(NEW_TAG)
+	-docker tag $(REG)$(IMAGE)$(OLD_TAG) $(REG)$(IMAGE)$(NEW_TAG)
+	-docker push $(REG)$(IMAGE)$(NEW_TAG)
