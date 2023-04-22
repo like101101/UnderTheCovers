@@ -1,4 +1,4 @@
-BUILT_IMAGE = $(shell make -C ../.. show-tag)
+BUILT_IMAGE = $(shell make -C ../.. show-tag -s)
 CWD := $(shell pwd)
 CONTAINER_DIR := /home/jovyan
 
@@ -13,7 +13,7 @@ build:
     done
 
 ibuild: MOUNT = $(CWD):$(CONTAINER_DIR)
-ibuild: 
+ibuild: pull
 	docker run -u 0 -v $(MOUNT) $(BUILT_IMAGE) make build
 
 itest: MOUNT = $(CWD):$(CONTAINER_DIR)
