@@ -1,4 +1,4 @@
-BUILT_IMAGE = $(shell make -C ../.. show-tag -s)
+BUILT_IMAGE = $(shell make -C ../.. show-tag --no-print-directory)
 CWD := $(shell pwd)
 CONTAINER_DIR := /home/jovyan
 
