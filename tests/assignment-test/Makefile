@@ -13,7 +13,7 @@ build:
     done
 
 ibuild: MOUNT = $(CWD):$(CONTAINER_DIR)
-ibuild: pull
+ibuild: 
 	docker run -u 0 -v $(MOUNT) $(BUILT_IMAGE) make build
 
 itest: MOUNT = $(CWD):$(CONTAINER_DIR)
